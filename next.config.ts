@@ -6,8 +6,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/proglang-concept' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/proglang-concept' : '',
+  distDir: 'out',
 };
 
 export default nextConfig;
