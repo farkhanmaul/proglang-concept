@@ -97,14 +97,22 @@ export const LanguageCard = memo(function LanguageCard({ language, priority = fa
           )}
 
           <div className="flex items-center justify-between pt-3">
-            <Link
-              href={`/language/${language.id}`}
-              className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
-              aria-label={`Learn more about ${language.name}`}
-            >
-              Learn More
-              <ExternalLink className="w-3 h-3" />
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                href={`/language/${language.id}`}
+                className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                aria-label={`Learn more about ${language.name}`}
+              >
+                Learn More
+                <ExternalLink className="w-3 h-3" />
+              </Link>
+              <Link
+                href={`/compare?languages=${language.id}`}
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Compare
+              </Link>
+            </div>
 
             {language.popularity && (
               <div className="flex items-center gap-1">

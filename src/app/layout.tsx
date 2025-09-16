@@ -80,6 +80,15 @@ export const metadata: Metadata = {
     canonical: "https://farkhanmaul.github.io/proglang-concept",
   },
   viewport: "width=device-width, initial-scale=1",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "ProgLang Concepts",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 const jsonLd = {
@@ -146,6 +155,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#3b82f6" />
       </head>
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider defaultTheme="system" storageKey="proglang-theme">

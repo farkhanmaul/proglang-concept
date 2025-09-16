@@ -36,6 +36,9 @@ export default function Header() {
           <a href="#timeline" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Timeline
           </a>
+          <a href="/compare" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            Compare
+          </a>
           <a href="#about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             About
           </a>
@@ -87,6 +90,13 @@ export default function Header() {
               onClick={() => setIsMenuOpen(false)}
             >
               Timeline
+            </a>
+            <a
+              href="/compare"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Compare
             </a>
             <a
               href="#about"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Search, Filter, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -22,6 +22,7 @@ export interface FilterState {
 export function SearchFilter({ onSearch, onFilter, categories, paradigms }: SearchFilterProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     categories: [],
     paradigms: [],
@@ -29,9 +30,43 @@ export function SearchFilter({ onSearch, onFilter, categories, paradigms }: Sear
     trend: []
   });
 
+  // Import languages for autocomplete
+  const { programmingLanguages } = useMemo(() => {
+    // Dynamic import to avoid circular dependencies
+    return typeof window !== 'undefined'
+      ? require('@/data/languages')
+      : { programmingLanguages: [] };
+  }, []);
+
+  // Generate autocomplete suggestions
+  const suggestions = useMemo(() => {
+    if (!searchQuery || searchQuery.length < 2) return [];
+
+    const query = searchQuery.toLowerCase();
+    return programmingLanguages
+      .filter((lang: any) =>
+        lang.name.toLowerCase().includes(query) ||
+        lang.creator.toLowerCase().includes(query) ||
+        lang.description.toLowerCase().includes(query)
+      )
+      .slice(0, 5)
+      .map((lang: any) => ({
+        type: 'language' as const,
+        text: lang.name,
+        subtitle: `Created by ${lang.creator} (${lang.year})`
+      }));
+  }, [searchQuery, programmingLanguages]);
+
   const handleSearchChange = useCallback((value: string) => {
     setSearchQuery(value);
     onSearch(value);
+    setShowSuggestions(value.length >= 2);
+  }, [onSearch]);
+
+  const selectSuggestion = useCallback((suggestion: any) => {
+    setSearchQuery(suggestion.text);
+    onSearch(suggestion.text);
+    setShowSuggestions(false);
   }, [onSearch]);
 
   const toggleFilter = useCallback((type: keyof FilterState, value: string) => {
@@ -70,8 +105,31 @@ export function SearchFilter({ onSearch, onFilter, categories, paradigms }: Sear
           placeholder="Search programming languages..."
           value={searchQuery}
           onChange={(e) => handleSearchChange(e.target.value)}
+          onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
+          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           className="w-full pl-10 pr-4 py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
         />
+
+        {/* Autocomplete Suggestions */}
+        {showSuggestions && suggestions.length > 0 && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+            {suggestions.map((suggestion, index) => (
+              <button
+                key={index}
+                className="w-full px-4 py-3 text-left hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-between"
+                onClick={() => selectSuggestion(suggestion)}
+              >
+                <div>
+                  <div className="font-medium">{suggestion.text}</div>
+                  <div className="text-xs text-muted-foreground">{suggestion.subtitle}</div>
+                </div>
+                <Badge variant="secondary" className="text-xs">
+                  {suggestion.type}
+                </Badge>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Filter Toggle */}

@@ -4,7 +4,38 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { LanguageCard } from "@/components/LanguageCard";
 import { SearchFilter, FilterState } from "@/components/SearchFilter";
-import { Timeline } from "@/components/Timeline";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { PWAInstall } from "@/components/PWAInstall";
+import dynamic from 'next/dynamic';
+
+const Timeline = dynamic(() => import("@/components/Timeline").then(mod => ({ default: mod.Timeline })), {
+  loading: () => (
+    <div className="py-20">
+      <div className="container">
+        <div className="text-center mb-12">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-muted rounded w-64 mx-auto"></div>
+            <div className="h-4 bg-muted rounded w-96 mx-auto"></div>
+          </div>
+        </div>
+        <div className="space-y-8">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="animate-pulse">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-muted rounded-full"></div>
+                <div className="flex-1">
+                  <div className="h-6 bg-muted rounded w-48 mb-2"></div>
+                  <div className="h-4 bg-muted rounded w-96"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  ),
+  ssr: false
+});
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -182,11 +213,13 @@ export default function Home() {
         </section>
 
         {/* Timeline */}
-        <section id="timeline" className="py-20">
-          <div className="container">
-            <Timeline />
-          </div>
-        </section>
+        <ErrorBoundary>
+          <section id="timeline" className="py-20">
+            <div className="container">
+              <Timeline />
+            </div>
+          </section>
+        </ErrorBoundary>
 
         {/* Core Concepts */}
         <section id="concepts" className="py-20 bg-muted/30">
@@ -308,6 +341,7 @@ export default function Home() {
         </section>
       </main>
       <Footer />
+      <PWAInstall />
     </>
   );
 }
