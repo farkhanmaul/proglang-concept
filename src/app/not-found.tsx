@@ -16,7 +16,7 @@ export default function NotFound() {
             <div className="text-8xl font-bold text-primary/20">404</div>
             <h1 className="text-4xl font-bold text-foreground">Page Not Found</h1>
             <p className="text-xl text-muted-foreground">
-              The programming language or page you're looking for doesn't exist or has been moved.
+              The programming language or page you&apos;re looking for doesn&apos;t exist or has been moved.
             </p>
           </div>
 

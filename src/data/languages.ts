@@ -585,7 +585,7 @@ export const programmingLanguages: ProgrammingLanguage[] = [
       helloWorld: 'fun main() {\n    println("Hello, World!")\n}',
       variables: 'val message = "Hello"\nvar count = 42\nval isActive = true',
       functions: 'fun greet(name: String): String {\n    return "Hello, $name!"\n}',
-      classes: 'class Person(val name: String) {\n    fun introduce() = "Hi, I\'m $name"\n}'
+      classes: 'class Person(val name: String) {\n    fun introduce() = "Hi, I&apos;m $name"\n}'
     },
     category: 'mobile',
     status: 'active',
