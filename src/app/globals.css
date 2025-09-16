@@ -88,4 +88,101 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Custom animations */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-in-from-top {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out;
+  }
+
+  .animate-in {
+    animation-fill-mode: both;
+  }
+
+  .slide-in-from-top-2 {
+    animation: slide-in-from-top 0.2s ease-out;
+  }
+
+  /* Responsive improvements */
+  @media (max-width: 768px) {
+    .container {
+      @apply px-4;
+    }
+
+    .text-4xl {
+      @apply text-3xl;
+    }
+
+    .text-5xl {
+      @apply text-4xl;
+    }
+
+    .text-6xl {
+      @apply text-5xl;
+    }
+
+    .py-20 {
+      @apply py-12;
+    }
+
+    .py-32 {
+      @apply py-16;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .text-3xl {
+      @apply text-2xl;
+    }
+
+    .text-4xl {
+      @apply text-3xl;
+    }
+
+    .py-16 {
+      @apply py-10;
+    }
+
+    .py-12 {
+      @apply py-8;
+    }
+  }
+
+  /* Focus improvements for accessibility */
+  .focus\:ring-primary:focus {
+    @apply ring-primary;
+  }
+
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better mobile card layouts */
+  @media (max-width: 768px) {
+    .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+      @apply gap-4;
+    }
+  }
 }

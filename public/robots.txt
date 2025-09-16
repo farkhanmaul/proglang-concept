@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://farkhanmaul.github.io/proglang-concept/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1
+
+# Block any admin or private paths (if any in future)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Allow all search engines to index the site
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

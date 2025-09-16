@@ -79,7 +79,7 @@ export function generateLanguageMetadata(language: ProgrammingLanguage): Metadat
     `${language.name} tutorial`,
     language.creator,
     language.year.toString(),
-    ...language.paradigms.map(p => p.name.toLowerCase()),
+    ...language.paradigms.flatMap(p => p.characteristics),
     language.category,
     'programming language',
     'software development',

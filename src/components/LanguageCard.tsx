@@ -4,18 +4,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Calendar, User, Code, ExternalLink } from 'lucide-react';
 import { LANGUAGE_CATEGORIES, LANGUAGE_STATUS } from '@/lib/constants';
 import Link from 'next/link';
+import { memo } from 'react';
 
 interface LanguageCardProps {
   language: ProgrammingLanguage;
   priority?: boolean;
 }
 
-export function LanguageCard({ language, priority = false }: LanguageCardProps) {
+export const LanguageCard = memo(function LanguageCard({ language, priority = false }: LanguageCardProps) {
   const category = LANGUAGE_CATEGORIES[language.category];
   const status = LANGUAGE_STATUS[language.status];
 
   return (
-    <Card className="group h-full transition-all duration-200 hover:shadow-lg">
+    <Card className="group h-full transition-all duration-200 hover:shadow-lg hover:shadow-primary/10 hover:scale-[1.02]">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -97,7 +98,7 @@ export function LanguageCard({ language, priority = false }: LanguageCardProps) 
 
           <div className="flex items-center justify-between pt-3">
             <Link
-              href={`/languages/${language.id}`}
+              href={`/language/${language.id}`}
               className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
               aria-label={`Learn more about ${language.name}`}
             >
@@ -118,4 +119,4 @@ export function LanguageCard({ language, priority = false }: LanguageCardProps) 
       </CardContent>
     </Card>
   );
-}
+});

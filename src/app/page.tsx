@@ -1,16 +1,67 @@
 "use client";
-
 import { Code, BookOpen, Users, Globe, Calendar, Cpu, Zap, Star, ArrowRight, Terminal } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { LanguageCard } from "@/components/LanguageCard";
+import { SearchFilter, FilterState } from "@/components/SearchFilter";
+import { Timeline } from "@/components/Timeline";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { programmingLanguages } from "@/data/languages";
+import { useState, useMemo } from "react";
 
 export default function Home() {
-  const featuredLanguages = programmingLanguages.slice(0, 6);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState<FilterState>({
+    categories: [],
+    paradigms: [],
+    yearRange: [1950, 2024],
+    trend: []
+  });
+
+  const categories = useMemo(() =>
+    [...new Set(programmingLanguages.map(lang => lang.category))], []
+  );
+
+  const paradigms = useMemo(() =>
+    [...new Set(programmingLanguages.flatMap(lang =>
+      lang.paradigms.flatMap(p => p.characteristics)
+    ))], []
+  );
+
+  const filteredLanguages = useMemo(() => {
+    return programmingLanguages.filter(language => {
+      // Search query filter
+      if (searchQuery && !language.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          !language.description.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          !language.creator.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+
+      // Category filter
+      if (filters.categories.length > 0 && !filters.categories.includes(language.category)) {
+        return false;
+      }
+
+      // Paradigm filter
+      if (filters.paradigms.length > 0) {
+        const hasMatchingParadigm = language.paradigms.some(paradigm =>
+          paradigm.characteristics.some(char => filters.paradigms.includes(char))
+        );
+        if (!hasMatchingParadigm) return false;
+      }
+
+      // Trend filter
+      if (filters.trend.length > 0 && !filters.trend.includes(language.popularity.trend)) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [searchQuery, filters]);
+
+  const featuredLanguages = filteredLanguages.slice(0, 6);
 
   return (
     <>
@@ -76,24 +127,64 @@ export default function Home() {
         <section id="languages" className="py-20">
           <div className="container">
             <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Popular Languages</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Programming Languages</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Explore the most influential programming languages that have shaped modern software development
+                Explore programming languages that have shaped modern software development
+              </p>
+            </div>
+
+            {/* Search and Filter */}
+            <div className="mb-12">
+              <SearchFilter
+                onSearch={setSearchQuery}
+                onFilter={setFilters}
+                categories={categories}
+                paradigms={paradigms}
+              />
+            </div>
+
+            {/* Results */}
+            <div className="mb-6">
+              <p className="text-sm text-muted-foreground">
+                Showing {filteredLanguages.length} of {programmingLanguages.length} languages
+                {searchQuery && <span> for "{searchQuery}"</span>}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredLanguages.map((language) => (
-                <LanguageCard key={language.id} language={language} />
-              ))}
+              {filteredLanguages.length > 0 ? (
+                filteredLanguages.map((language) => (
+                  <LanguageCard key={language.id} language={language} />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-muted-foreground text-lg">No languages match your search criteria.</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-4"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setFilters({
+                        categories: [],
+                        paradigms: [],
+                        yearRange: [1950, 2024],
+                        trend: []
+                      });
+                    }}
+                  >
+                    Clear all filters
+                  </Button>
+                </div>
+              )}
             </div>
+          </div>
+        </section>
 
-            <div className="text-center mt-12">
-              <Button variant="outline" size="lg">
-                View All Languages
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </div>
+        {/* Timeline */}
+        <section id="timeline" className="py-20">
+          <div className="container">
+            <Timeline />
           </div>
         </section>
 
