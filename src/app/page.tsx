@@ -178,7 +178,7 @@ export default function Home() {
             <div className="mb-6">
               <p className="text-sm text-muted-foreground">
                 Showing {filteredLanguages.length} of {programmingLanguages.length} languages
-                {searchQuery && <span> for "{searchQuery}"</span>}
+                {searchQuery && <span> for &ldquo;{searchQuery}&rdquo;</span>}
               </p>
             </div>
 
