@@ -7,6 +7,7 @@ import { programmingLanguages } from '@/data/languages';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { LanguageBreadcrumb } from '@/components/Breadcrumb';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -51,6 +52,11 @@ export default function LanguageDetailPage({ params }: LanguageDetailPageProps) 
       <Header />
       <main className="min-h-screen pt-8 pb-16">
         <div className="container">
+          {/* Breadcrumb */}
+          <div className="mb-6">
+            <LanguageBreadcrumb languageName={language.name} />
+          </div>
+
           {/* Back Button */}
           <Link href="/#languages" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
             <ArrowLeft className="h-4 w-4" />

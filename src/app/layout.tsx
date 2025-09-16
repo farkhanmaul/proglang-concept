@@ -132,13 +132,15 @@ const jsonLd = {
   }
 };
 
+import { ThemeProvider } from '@/lib/theme';
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -146,7 +148,9 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased`}>
-        {children}
+        <ThemeProvider defaultTheme="system" storageKey="proglang-theme">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
