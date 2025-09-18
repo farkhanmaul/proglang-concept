@@ -19,6 +19,12 @@ export interface FilterState {
   trend: string[];
 }
 
+interface SearchSuggestion {
+  type: 'language';
+  text: string;
+  subtitle: string;
+}
+
 export function SearchFilter({ onSearch, onFilter, categories, paradigms }: SearchFilterProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
@@ -39,21 +45,25 @@ export function SearchFilter({ onSearch, onFilter, categories, paradigms }: Sear
   }, []);
 
   // Generate autocomplete suggestions
-  const suggestions = useMemo(() => {
+  const suggestions = useMemo((): SearchSuggestion[] => {
     if (!searchQuery || searchQuery.length < 2) return [];
 
     const query = searchQuery.toLowerCase();
     return programmingLanguages
-      .filter((lang: any) =>
-        lang.name.toLowerCase().includes(query) ||
-        lang.creator.toLowerCase().includes(query) ||
-        lang.description.toLowerCase().includes(query)
-      )
+      .filter((lang: any) => {
+        const creatorText = Array.isArray(lang.creator)
+          ? lang.creator.join(' ').toLowerCase()
+          : lang.creator.toLowerCase();
+
+        return lang.name.toLowerCase().includes(query) ||
+               creatorText.includes(query) ||
+               lang.description.toLowerCase().includes(query);
+      })
       .slice(0, 5)
       .map((lang: any) => ({
         type: 'language' as const,
         text: lang.name,
-        subtitle: `Created by ${lang.creator} (${lang.year})`
+        subtitle: `Created by ${Array.isArray(lang.creator) ? lang.creator.join(', ') : lang.creator} (${lang.year})`
       }));
   }, [searchQuery, programmingLanguages]);
 
@@ -63,7 +73,7 @@ export function SearchFilter({ onSearch, onFilter, categories, paradigms }: Sear
     setShowSuggestions(value.length >= 2);
   }, [onSearch]);
 
-  const selectSuggestion = useCallback((suggestion: any) => {
+  const selectSuggestion = useCallback((suggestion: SearchSuggestion) => {
     setSearchQuery(suggestion.text);
     onSearch(suggestion.text);
     setShowSuggestions(false);
