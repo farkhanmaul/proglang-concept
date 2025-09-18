@@ -66,10 +66,17 @@ export default function Home() {
   const filteredLanguages = useMemo(() => {
     return programmingLanguages.filter(language => {
       // Search query filter
-      if (searchQuery && !language.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          !language.description.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          !language.creator.toLowerCase().includes(searchQuery.toLowerCase())) {
-        return false;
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const creatorText = Array.isArray(language.creator)
+          ? language.creator.join(' ').toLowerCase()
+          : language.creator.toLowerCase();
+
+        if (!language.name.toLowerCase().includes(query) &&
+            !language.description.toLowerCase().includes(query) &&
+            !creatorText.includes(query)) {
+          return false;
+        }
       }
 
       // Category filter
