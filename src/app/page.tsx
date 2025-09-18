@@ -51,15 +51,17 @@ export default function Home() {
     trend: []
   });
 
-  const categories = useMemo(() =>
-    [...new Set(programmingLanguages.map(lang => lang.category))], []
-  );
+  const categories = useMemo(() => {
+    const categorySet = new Set(programmingLanguages.map(lang => lang.category));
+    return Array.from(categorySet);
+  }, []);
 
-  const paradigms = useMemo(() =>
-    [...new Set(programmingLanguages.flatMap(lang =>
+  const paradigms = useMemo(() => {
+    const paradigmSet = new Set(programmingLanguages.flatMap(lang =>
       lang.paradigms.flatMap(p => p.characteristics)
-    ))], []
-  );
+    ));
+    return Array.from(paradigmSet);
+  }, []);
 
   const filteredLanguages = useMemo(() => {
     return programmingLanguages.filter(language => {
