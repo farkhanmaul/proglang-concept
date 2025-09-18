@@ -12,14 +12,15 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 interface LanguageDetailPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 
-export default function LanguageDetailPage({ params }: LanguageDetailPageProps) {
-  const language = programmingLanguages.find(lang => lang.id === params.id);
+export default async function LanguageDetailPage({ params }: LanguageDetailPageProps) {
+  const { id } = await params;
+  const language = programmingLanguages.find(lang => lang.id === id);
 
   if (!language) {
     notFound();
