@@ -3,6 +3,7 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { programmingLanguages } from '@/data/languages';
+import { ProgrammingLanguage } from '@/types';
 import { LanguageComparison } from '@/components/LanguageComparison';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Breadcrumb } from '@/components/Breadcrumb';
@@ -15,7 +16,7 @@ function CompareContent() {
 
   const initialLanguages = languageIds
     .map(id => programmingLanguages.find(lang => lang.id === id))
-    .filter(Boolean) as any[];
+    .filter((lang): lang is ProgrammingLanguage => lang !== undefined);
 
   return (
     <>

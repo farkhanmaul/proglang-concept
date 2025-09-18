@@ -4,6 +4,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { Search, Filter, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { ProgrammingLanguage } from '@/types';
 
 interface SearchFilterProps {
   onSearch: (query: string) => void;
@@ -49,8 +50,8 @@ export function SearchFilter({ onSearch, onFilter, categories, paradigms }: Sear
     if (!searchQuery || searchQuery.length < 2) return [];
 
     const query = searchQuery.toLowerCase();
-    return programmingLanguages
-      .filter((lang: any) => {
+    return (programmingLanguages as ProgrammingLanguage[])
+      .filter((lang: ProgrammingLanguage) => {
         const creatorText = Array.isArray(lang.creator)
           ? lang.creator.join(' ').toLowerCase()
           : lang.creator.toLowerCase();
@@ -60,7 +61,7 @@ export function SearchFilter({ onSearch, onFilter, categories, paradigms }: Sear
                lang.description.toLowerCase().includes(query);
       })
       .slice(0, 5)
-      .map((lang: any) => ({
+      .map((lang: ProgrammingLanguage) => ({
         type: 'language' as const,
         text: lang.name,
         subtitle: `Created by ${Array.isArray(lang.creator) ? lang.creator.join(', ') : lang.creator} (${lang.year})`
