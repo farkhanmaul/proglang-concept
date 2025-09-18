@@ -1,5 +1,3 @@
-"use client";
-
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ExternalLink, Github, Users, Calendar, Code, Cpu, Zap, Globe, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import Link from 'next/link';
